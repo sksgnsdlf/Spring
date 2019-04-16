@@ -20,9 +20,16 @@ public class BoardDAOSpring {
     private final String BOARD_DELETE = "delete board where seq=?";
     private final String BOARD_GET    = "select * from board where seq=?";
     private final String BOARD_LIST = "select * from board  order by seq desc";
+    private final String BOARD_COUNT = "select count(*) from board";
     
     @Autowired
     JdbcTemplate jdbcTemplate;
+    
+    //레코드 건수
+	/*
+	 * public int getBoardCount() { return jdbcTemplate.queryForObject(BOARD_GET,
+	 * args, new BoardRowMapper());; }
+	 */
     
     //글 등록
     public void insertBoard(BoardVO vo) {
@@ -32,16 +39,22 @@ public class BoardDAOSpring {
     
     //글 수정
     public void updateBoard(BoardVO vo) {
-    	
+    	System.out.println("===> Spring JDBC로 updateBoard() 기능 처리");
+    	Object[] args = {vo.getTitle(), vo.getContent(), vo.getSeq()};
+    	jdbcTemplate.update(BOARD_UPDATE, args);
     }
     
     //글 삭제
     public void deleteBoard(BoardVO vo) {
-    	
+    	System.out.println("===> Spring JDBC로 deleteBoard() 기능 처리");
+    	jdbcTemplate.update(BOARD_DELETE, vo.getSeq());
     }
     
+    //글 상세 조회(단건조회)
     public BoardVO getBoard(BoardVO vo) {
-    	return null;
+    	System.out.println("===> Spring JDBC로 getBoard() 기능 처리");
+    	Object[] args = {vo.getSeq()};
+    	return jdbcTemplate.queryForObject(BOARD_GET, args, new BoardRowMapper());
     }
     
     //글 목록 조회

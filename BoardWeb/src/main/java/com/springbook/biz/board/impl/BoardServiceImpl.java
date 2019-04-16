@@ -18,7 +18,9 @@ public class BoardServiceImpl implements Boardservice {
 	
 	@Override
 	public void insertBoard(BoardVO vo) {
-		dao.insertBoard(vo);
+	//around AOP 트랜잭션 처리
+		dao.insertBoard(vo); 
+	//commit
 	}
 
 	@Override

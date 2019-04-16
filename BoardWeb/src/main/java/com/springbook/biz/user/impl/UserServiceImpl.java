@@ -11,12 +11,9 @@ public class UserServiceImpl implements Userservice {
 	
 	//Autowired가 UserDAO 자체를 가져오는것(DAO에 repository로 연결해줬다)
 	@Autowired
-	private UserDAO userDAO;
+	private UserDAOSpring userDAO;
 	
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-	
+	@Override
 	public UserVO getUser(UserVO vo) {
 		return userDAO.getUser(vo);
 	}
