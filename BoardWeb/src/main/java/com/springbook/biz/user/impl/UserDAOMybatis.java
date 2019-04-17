@@ -22,10 +22,12 @@ public class UserDAOMybatis {
 	public List<UserVO> getUserList(){
 		return mybatis.selectList("UserDAO.getUserList");
 	}
+	
 	//user인원수
 	public Integer userCount() {
 		return mybatis.selectOne("UserDAO.userCount");
 	}
+	
 	//user인원수를 map으로
 	public List<Map<String,Object>> getUserMap(UserVO vo){
 		return mybatis.selectList("UserDAO.getUserMap",vo);
