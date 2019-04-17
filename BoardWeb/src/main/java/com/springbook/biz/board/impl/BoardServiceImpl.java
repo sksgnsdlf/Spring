@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.springbook.biz.board.BoardVO;
 import com.springbook.biz.board.Boardservice;
-import com.springbook.biz.common.Log4jAdvice;
-import com.springbook.biz.common.LogAdvice;
 
 @Service("boardService")
 public class BoardServiceImpl implements Boardservice {
 
 	//@Autowired BoardDAO dao;
-	@Autowired BoardDAOSpring dao;
+	//@Autowired BoardDAOSpring dao;
+	@Autowired BoardDAOMybatis dao;
 	
 	@Override
 	public void insertBoard(BoardVO vo) {

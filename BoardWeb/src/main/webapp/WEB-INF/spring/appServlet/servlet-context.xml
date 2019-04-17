@@ -9,7 +9,8 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
-	<beans:import resource="classpath:applicationContext.xml"/> 
+	<beans:import resource="classpath:config/applicationContext.xml"/> 
+	<beans:import resource="classpath:config/context-mapper.xml"/> 
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
