@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+
+<insert id="insertDept" parameterType="com.springbook.biz.emp.DeptVO">
+    <selectKey keyProperty="departmentId" resultType="string" order="BEFORE">
+        SELECT MAX(DEPARTMENT_ID)+10 FROM HR.DEPARTMENTS
+    </selectKey>
+    
+    INSERT INTO HR.DEPARTMENTS(
+                                DEPARTMENT_ID,
+                                DEPARTMENT_NAME
+                        <if test="managerId != null">
+                                ,MANAGER_ID
+                        </if>
+                        <if test="locationId != null">
+                                ,LOCATION_ID
+                        </if>)
+    VALUES( #{departmentId},
+            #{departmentName}
+             <if test="managerId != null">
+            ,#{managerId}
+            </if>
+            <if test="locationId != null">
+            ,#{locationId}
+            </if>
+            )
+</insert >
+
+<select id="getDept" parameterType="com.springbook.biz.emp.DeptVO"
+    resultType="com.springbook.biz.emp.DeptVO">
+    SELECT DEPARTMENT_ID,
+            DEPARTMENT_NAME,
+            MANAGER_ID,
+            LOCATION_ID
+    FROM HR.DEPARTMENTS
+    WHERE DEPARTMENT_ID = #{departmentId}
+</select>
+
+<update id="updateDept">
+    UPDATE HR.DEPARTMENTS
+     SET   DEPARMENT_NAME = #{departmentName},
+           MANAGER_ID = #{managerId},
+           LOCATION_ID = #{locationId}
+     where DEPARTMENT_ID = #{departmentId}
+</update>
+
+<delete id="deleteDept">
+    DELETE 
+      FROM HR.DEPARTMENTS
+     WHERE DEPARTMENT_ID = #{departmentId}
+</delete>
+
+<select id="getCount" resultType="int">
+    SELECT COUNT(*)
+    FROM HR.DEPARTMENTS
+</select>
+
+<!--부서별사원정보-->
+<resultMap id="deptCntResult" type="map">
+    <id property="id" column="department_id"/><!--pk는 id로  적는편-->
+    <result property="name" column="DEPARTMENT_NAME"/>
+    <result property="cnt" column="EMP_COUNT"/>
+</resultMap>
+
+<select id="getDeptCnt" resultMap="deptCntResult">
+    SELECT   DEPARTMENT_ID,
+             DEPARTMENT_NAME,
+             COUNT(*) EMP_COUNT
+    FROM     HR.DEPARTMENTS D NATURAL JOIN HR.EMPLOYEES E 
+    GROUP BY DEPARTMENT_ID, DEPARTMENT_NAME
+    <![CDATA[ 
+    HAVING COUNT(*) < 5
+    -- 주석 HAVING 3 < 5 --
+    ]]>
+    
+</select>
+</mapper>
