@@ -22,19 +22,30 @@
     </insert>
     
     <update id="updateBoard">
-        <![CDATA[
-        UPDATE BOARD SET
-            TITLE = #{title}, 
-            CONTENT = #{content} 
+        UPDATE BOARD 
+        <set>
+            <if test="title != null">   TITLE = #{title}, </if> 
+            <if test="content != null"> CONTENT = #{content}, </if> 
+            <if test="writer != null">  WRITER = #{writer}, </if> 
+            <if test="cnt != null">     CNT = ${cnt} </if> 
+        </set>
         WHERE SEQ = #{seq}
-        ]]>
     </update>
-    
     <delete id="deleteBoard">
-        <![CDATA[
         DELETE BOARD
-        WHERE SEQ = #{seq}
-        ]]>
+        <where>
+            <choose>
+                <when test="seqs != null">
+                    SEQ IN
+                    <foreach item="t" collection="seqs" open="(" close=")" separator=",">
+                    #{t}
+                    </foreach>
+                </when> 
+                <otherwise>
+                    SEQ = #{seq}
+                </otherwise>
+            </choose>
+        </where>
     </delete>
     
     <select id="getBoard" resultType="board">
@@ -45,17 +56,43 @@
         ]]>
     </select>
     
-    <select id="getBoardList" resultMap="boardResult">
+    <select id="getBoardList" resultMap="boardResult" parameterType="board">
 	    SELECT * 
 	    FROM BOARD
-	    WHERE 1 = 1
-    	<if test="searchCondition == 'TITLE'">
+        <where>
+            <choose>
+                <when test="searchCondition == 'TITLE'" >
+                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchCondition == 'CONTENT'" >
+                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </where>
+    	ORDER BY SEQ DESC
+    </select>
+    <!-- Paging count수 -->
+    <select id="getBoardCount" resultType="int">
+        SELECT COUNT(*)
+        FROM   BOARD
+        <where>
+            <choose>
+                <when test="searchCondition == 'TITLE'" >
+                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchCondition == 'CONTENT'" >
+                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+        <!--   	
+        WHERE 1 = 1
+        <if test="searchCondition == 'TITLE'">
         AND TITLE LIKE '%'||#{searchKeyword}||'%' 
     	</if>
     	<if test="searchCondition == 'CONTENT'">
         AND CONTENT LIKE '%'||#{searchKeyword}||'%' 
     	</if>
-    	ORDER BY SEQ DESC
-</select>
-
+        -->
 </mapper>

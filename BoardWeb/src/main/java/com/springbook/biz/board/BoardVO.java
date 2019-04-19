@@ -1,6 +1,7 @@
 package com.springbook.biz.board;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 public class BoardVO {
 	private int seq;
@@ -9,6 +10,28 @@ public class BoardVO {
 	private String content;
 	private Date regDate;
 	private int cnt;
+	private String searchCondition;
+	private String searchKeyword;
+	private String[] seqs;
+	
+	public String[] getSeqs() {
+		return seqs;
+	}
+	public void setSeqs(String[] seqs) {
+		this.seqs = seqs;
+	}
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+	public String getSearchKeyword() {
+		return searchKeyword;
+	}
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
+	}
 	public int getSeq() {
 		return seq;
 	}
@@ -48,7 +71,7 @@ public class BoardVO {
 	@Override
 	public String toString() {
 		return "BoardVO [seq=" + seq + ", title=" + title + ", writer=" + writer + ", content=" + content + ", regDate="
-				+ regDate + ", cnt=" + cnt + "]";
+				+ regDate + ", cnt=" + cnt + ", searchCondition=" + searchCondition + ", searchKeyword=" + searchKeyword
+				+ ", seqs=" + Arrays.toString(seqs) + "]";
 	}
-	
 }

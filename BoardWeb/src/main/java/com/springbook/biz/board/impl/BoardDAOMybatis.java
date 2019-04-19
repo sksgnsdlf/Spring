@@ -34,4 +34,9 @@ public class BoardDAOMybatis {
 	public List<BoardVO> getBoardList(BoardVO vo) {
 		return mybatis.selectList("BoardDAO.getBoardList",vo);
 	}
+	
+	//페이징카운터수
+	public int getBoardCount(BoardVO vo) {
+		return mybatis.selectOne("BoardDAO.getBoardCount",vo);
+	}
 }

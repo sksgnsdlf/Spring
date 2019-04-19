@@ -21,4 +21,7 @@ public interface Boardservice {
 	// 글 목록 조회
 	List<BoardVO> getBoardList(BoardVO vo);
 
+	// 페이징 카운터 수
+	public int getBoardCount(BoardVO vo);
+
 }
