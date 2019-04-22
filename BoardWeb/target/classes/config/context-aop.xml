@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+<bean class="com.springbook.biz.common.Log4jAdvice" id="log4"/>
+<bean class="com.springbook.biz.common.LogAdvice" id="log"/>
+<bean class="com.springbook.biz.common.BeforeAdvice" id="beforeAdvice"/>
+<bean class="com.springbook.biz.common.AfterReturningAdvice" id="afterReturn"/>
+<bean class="com.springbook.biz.common.AroundAdvice" id="aroundAdvice"/>
+
+<aop:config>				 <!-- *(리턴타입) com..biz까지(패키지경로)-->
+	<aop:pointcut expression="execution(* com.springbook.biz..*Impl.*(..))" 
+	id="allpointcut"/>								<!-- *Impl(클래스명) .*..(메소드명 및 매개변수 -->
+	<!-- 위빙(엮다) 162p -->
+	<aop:aspect ref="beforeAdvice">
+		<aop:before method="beforeLog" pointcut-ref="allpointcut"/>
+	</aop:aspect>
+	
+	<aop:aspect ref="afterReturn">
+		<aop:after-returning method="afterLog" pointcut-ref="allpointcut" returning="returnObj"/>
+	</aop:aspect>
+	
+	<aop:aspect ref="aroundAdvice">
+		<aop:around method="aroundLog" pointcut-ref="allpointcut"/>
+	</aop:aspect>
+</aop:config>
+
+</beans>

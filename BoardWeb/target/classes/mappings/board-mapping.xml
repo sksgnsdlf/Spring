@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardDAO"> 
+     
+    <resultMap id="boardResult" type="board">
+        <id property="seq" column="SEQ" />
+        <result property="title" column="TITLE" />
+        <result property="writer" column="WRITER" />
+        <result property="content" column="CONTENT" />
+        <result property="regDate" column="REGDATE" />
+        <result property="cnt" column="CNT" />
+    </resultMap>
+
+    <insert id="insertBoard" parameterType="board">
+        <![CDATA[
+        INSERT INTO BOARD(SEQ, TITLE, WRITER, CONTENT) 
+        VALUES((SELECT NVL(MAX(SEQ), 0) + 1 FROM BOARD),
+        #{title}, #{writer}, #{content})
+        ]]>
+    </insert>
+    
+    <update id="updateBoard">
+        UPDATE BOARD 
+        <set>
+            <if test="title != null">   TITLE = #{title}, </if> 
+            <if test="content != null"> CONTENT = #{content}, </if> 
+            <if test="writer != null">  WRITER = #{writer}, </if> 
+            <if test="cnt != null">     CNT = ${cnt} </if> 
+        </set>
+        WHERE SEQ = #{seq}
+    </update>
+    <delete id="deleteBoard">
+        DELETE BOARD
+        <where>
+            <choose>
+                <when test="seqs != null">
+                    SEQ IN
+                    <foreach item="t" collection="seqs" open="(" close=")" separator=",">
+                    #{t}
+                    </foreach>
+                </when> 
+                <otherwise>
+                    SEQ = #{seq}
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+    
+    <select id="getBoard" resultType="board">
+        <![CDATA[
+        SELECT * 
+        FROM BOARD
+        WHERE SEQ = #{seq}
+        ]]>
+    </select>
+    
+    <select id="getBoardList" resultMap="boardResult" parameterType="board">
+	    SELECT * 
+	    FROM BOARD
+        <where>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCondition == 'TITLE'" >
+                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchCondition == 'CONTENT'" >
+                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </if>
+        </where>
+    	ORDER BY SEQ DESC
+    </select>
+    <!-- Paging count수 -->
+    <select id="getBoardCount" resultType="int">
+        SELECT COUNT(*)
+        FROM   BOARD
+        <where>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCondition == 'TITLE'" >
+                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchCondition == 'CONTENT'" >
+                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </if>
+        </where>
+    </select>
+        <!--   	
+        WHERE 1 = 1
+        <if test="searchCondition == 'TITLE'">
+        AND TITLE LIKE '%'||#{searchKeyword}||'%' 
+    	</if>
+    	<if test="searchCondition == 'CONTENT'">
+        AND CONTENT LIKE '%'||#{searchKeyword}||'%' 
+    	</if>
+        -->
+</mapper>
