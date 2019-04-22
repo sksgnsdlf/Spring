@@ -7,9 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="login">
-	id:<input name="id">
-	pw:<input name="password">
+<form action="login" method="post">
+	<%-- //id:<input name="id" value="${userVO.id}"> --%>
+	id:<input name="id" value="${user.id}">
+	pw:<input name="password" value="${user.password }">
 	<button>로그인</button>
 </form>
 </body>

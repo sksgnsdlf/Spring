@@ -60,6 +60,7 @@
 	    SELECT * 
 	    FROM BOARD
         <where>
+        <if test="searchKeyword != null and searchKeyword != ''">
             <choose>
                 <when test="searchCondition == 'TITLE'" >
                   AND TITLE LIKE '%' || #{searchKeyword} || '%'
@@ -68,6 +69,7 @@
                   AND CONTENT LIKE '%' || #{searchKeyword} || '%'
                 </when>
             </choose>
+        </if>
         </where>
     	ORDER BY SEQ DESC
     </select>
@@ -76,6 +78,7 @@
         SELECT COUNT(*)
         FROM   BOARD
         <where>
+        <if test="searchKeyword != null and searchKeyword != ''">
             <choose>
                 <when test="searchCondition == 'TITLE'" >
                   AND TITLE LIKE '%' || #{searchKeyword} || '%'
@@ -84,6 +87,7 @@
                   AND CONTENT LIKE '%' || #{searchKeyword} || '%'
                 </when>
             </choose>
+        </if>
         </where>
     </select>
         <!--   	

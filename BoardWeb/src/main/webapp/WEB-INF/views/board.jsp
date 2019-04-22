@@ -8,6 +8,13 @@
 <title>Insert title here</title>
 </head>
 <body>
+<c:if test="${not empty sessionScope.userName }"> 
+	${userName }님 환영합니다.
+	<input type="button" onclick="location='logout'" value="로그아웃">
+</c:if>
+<c:if test="${empty sessionScope.userName }"> 
+	<a href="login">로그인</a>
+</c:if>
 검색조건: ${boardVO}
 <form>
 	<select name="searchCondition">
@@ -30,7 +37,7 @@
 		<c:forEach items="${list}" var="board">
 		<tr>
 			<td>${board.seq }</td>
-			<td><a href="boardUpdateForm?seq=${board.seq }">${board.title }</a></td>
+			<td><a href="boardUpdate/${board.seq }">${board.title }</a></td>
 			<td>${board.writer }</td>
 			<td>${board.content }</td>
 			<td>${board.regDate }</td>
