@@ -77,14 +77,13 @@ public class BoardController {
 	//목록조회
 	@RequestMapping("/boardList")
 	public String boardList(Model model, Paging paging, 
-			@RequestParam(required=false, 
-			defaultValue="TITLE",
-			value="searchCondition") String cond,
-			@RequestParam(required=false, defaultValue="") String searchKeyword) {
-		
+							@RequestParam(required=false, defaultValue="TITLE", value="searchCondition") String cond, 
+							@RequestParam(required=false) String searchKeyword) { // @RequestParam의 required default값은 true 즉, 반드시 값이 있어야 함(파라미터 값이 null일때 실행 불가능)
 		BoardVO vo = new BoardVO();
 		vo.setSearchCondition(cond);
 		vo.setSearchKeyword(searchKeyword);
+		
+		paging.setPageUnit(5);
 		// 페이지번호 파라미터
 		if( paging.getPage() == 0) {
 			paging.setPage(1); 
@@ -94,11 +93,12 @@ public class BoardController {
 		vo.setFirst(paging.getFirst());
 		vo.setLast(paging.getLast());
 		
-		//전체 건수
+		// 전체 건수
 		paging.setTotalRecord(service.getBoardCount(vo));
-		model.addAttribute("paging", paging);
-		model.addAttribute("list",service.getBoardList(vo));
-		return "board";
+				
+		model.addAttribute("paging", paging );
+		model.addAttribute("list", service.getBoardList(vo));
+	    return "board";
 	}
 	
 	// 등록폼

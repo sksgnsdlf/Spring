@@ -7,6 +7,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	li { display:inline;}
+</style>
+<script>
+	function go_page(p) {
+		searchFrm.page.value = p;
+		searchFrm.submit();
+	}
+</script>
 </head>
 <body>
 <h3>게시판</h3>
@@ -19,7 +28,8 @@
 	<a href="login">로그인</a>
 </c:if>
 검색조건: ${boardVO}
-<form>
+<form name="searchFrm">
+    <input type="hidden" name="page">
 	<select name="searchCondition">
 		<option value="">선택
 		<c:forEach items="${condMap}" var="option">
@@ -27,11 +37,10 @@
 		</c:forEach>
 	</select>
 	<script>
-	searchFrm.searchCondition.value='${boardVO.searchCondition}';
+		searchFrm.searchCondition.value='${boardVO.searchCondition}';
 	</script>
 	<input name="searchKeyword" value="${boardVO.searchKeyword}"/>
 	<button>검색</button>
-
 </form>
 <form action="deleteBoard">
 	<table border="1">
@@ -53,8 +62,7 @@
 		</c:forEach>
 	</table>
 	<button>선택삭제</button>
-	
-	<my:paging paging="${paging}"/>
 </form>
+<my:paging paging="${paging}"/>
 </body>
 </html>

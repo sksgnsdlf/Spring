@@ -14,33 +14,35 @@
     </resultMap>
 
     <insert id="insertBoard" parameterType="board">
-        INSERT INTO BOARD(SEQ, 
-        TITLE, 
-        WRITER, 
-        CONTENT,
-        <if test="filename != null">
-        FILENAME
-        </if>
-        ) 
-        VALUES((SELECT NVL(MAX(SEQ), 0) + 1 FROM BOARD),
-        #{title}, 
-        #{writer}, 
-        #{content},
-        <if test="filename != null">
-        #{filename})
-    	</if>
+        INSERT INTO BOARD(SEQ 
+        				  , TITLE 
+        				  , WRITER 
+        				  , CONTENT
+        				  <if test="filename != null" >
+        				  , FILENAME
+        				  </if>
+        				  ) 
+        VALUES((SELECT NVL(MAX(SEQ), 0) + 1 FROM BOARD)
+        	  ,	#{title}
+        	  , #{writer}
+        	  , #{content}
+        	  <if test="filename != null" >
+        	  , #{filename}
+        	  </if>
+        	  )       	  
     </insert>
     
     <update id="updateBoard">
-        UPDATE BOARD 
-        <set>
-            <if test="title != null">   TITLE = #{title}, </if> 
-            <if test="content != null"> CONTENT = #{content}, </if> 
-            <if test="writer != null">  WRITER = #{writer}, </if> 
-            <if test="cnt != null">     CNT = ${cnt} </if> 
+        UPDATE BOARD
+        <set>           
+               <if test="title != null"> TITLE      = #{title}, </if> 
+               <if test="content != null"> CONTENT  = #{content}, </if>
+               <if test="writer != null"> WRITER    = #{writer}, </if>
+               <if test="cnt != null"> CNT          = #{cnt}, </if>
         </set>
         WHERE SEQ = #{seq}
     </update>
+    
     <delete id="deleteBoard">
         DELETE BOARD
         <where>
@@ -48,9 +50,9 @@
                 <when test="seqs != null">
                     SEQ IN
                     <foreach item="t" collection="seqs" open="(" close=")" separator=",">
-                    #{t}
+                        #{t}
                     </foreach>
-                </when> 
+                </when>
                 <otherwise>
                     SEQ = #{seq}
                 </otherwise>
@@ -67,46 +69,39 @@
     </select>
     
     <select id="getBoardList" resultMap="boardResult" parameterType="board">
+    select a.* from ( select b.*, rownum rn from ( 
 	    SELECT * 
 	    FROM BOARD
-        <where>
-        <if test="searchKeyword != null and searchKeyword != ''">
+	    <where> <!-- 동적연산자가 있으면 자동으로 where가 붙는 방식 -->
+          <if test="searchKeyword != null and searchKeyword !=''"> <!-- BoardController에서 public String boardList(Model model, Paging paging, @RequestParam(required=false, defaultValue="TITLE") String searchCondition, @RequestParam(required=false) String searchKeyword) 여기서 searchKeyword값이 null일때 즉, searchCondition만 있어도 조회가능하게 하기 위해 if문 사용 => if문 사용하는 것이 아니면 searchKeyword부분에서 @RequestParam(required=false, defaultValue="") 이렇게 null값이 아닌 빈값을 주면 됨 -->
             <choose>
-                <when test="searchCondition == 'TITLE'" >
-                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                <when test="searchCondition == 'TITLE'">
+                    AND TITLE LIKE '%' || #{searchKeyword} || '%'
                 </when>
-                <when test="searchCondition == 'CONTENT'" >
-                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
-                </when>
+                <when test="searchCondition == 'CONTENT'">
+                    AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>            
             </choose>
-        </if>
+          </if>
         </where>
-    	ORDER BY SEQ DESC
+    	ORDER BY SEQ
+    	) b ) a where rn between #{first} and #{last}
     </select>
-    <!-- Paging count수 -->
+	<!-- Paging count수 -->
     <select id="getBoardCount" resultType="int">
-        SELECT COUNT(*)
-        FROM   BOARD
+        SELECT COUNT(*) FROM BOARD
         <where>
-        <if test="searchKeyword != null and searchKeyword != ''">
+          <if test="searchKeyword != null and searchKeyword !=''"> <!-- BoardController의 boardList에서 paging.setTotalRecord(service.getBoardCount(vo)); 떄문에 여기서도 if문을 같이 주어야 함 -->
             <choose>
-                <when test="searchCondition == 'TITLE'" >
-                  AND TITLE LIKE '%' || #{searchKeyword} || '%'
+                <when test="searchCondition == 'TITLE'">
+                    AND TITLE LIKE '%' || #{searchKeyword} || '%'
                 </when>
-                <when test="searchCondition == 'CONTENT'" >
-                  AND CONTENT LIKE '%' || #{searchKeyword} || '%'
-                </when>
+                <when test="searchCondition == 'CONTENT'">
+                    AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+                </when>            
             </choose>
-        </if>
-        </where>
+          </if>
+        </where>   
     </select>
-        <!--   	
-        WHERE 1 = 1
-        <if test="searchCondition == 'TITLE'">
-        AND TITLE LIKE '%'||#{searchKeyword}||'%' 
-    	</if>
-    	<if test="searchCondition == 'CONTENT'">
-        AND CONTENT LIKE '%'||#{searchKeyword}||'%' 
-    	</if>
-        -->
+
 </mapper>
