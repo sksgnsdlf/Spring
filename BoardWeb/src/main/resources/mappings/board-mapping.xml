@@ -14,11 +14,21 @@
     </resultMap>
 
     <insert id="insertBoard" parameterType="board">
-        <![CDATA[
-        INSERT INTO BOARD(SEQ, TITLE, WRITER, CONTENT) 
+        INSERT INTO BOARD(SEQ, 
+        TITLE, 
+        WRITER, 
+        CONTENT,
+        <if test="filename != null">
+        FILENAME
+        </if>
+        ) 
         VALUES((SELECT NVL(MAX(SEQ), 0) + 1 FROM BOARD),
-        #{title}, #{writer}, #{content})
-        ]]>
+        #{title}, 
+        #{writer}, 
+        #{content},
+        <if test="filename != null">
+        #{filename})
+    	</if>
     </insert>
     
     <update id="updateBoard">

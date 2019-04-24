@@ -14,6 +14,13 @@
 <context:component-scan base-package="com.springbook"/>
 <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 
+	<!-- 파일 업로드 설정 -->			 <!-- CMR적고 crtl + space바 -->	
+	<bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxInMemorySize" value="102400"></property>
+		<property name="maxUploadSizePerFile" value="1024000" ></property>
+	</bean>
+
 	<!-- Connection pool 설정 -->
 	<context:property-placeholder location="classpath:database.properties"/>
 	<bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" 
