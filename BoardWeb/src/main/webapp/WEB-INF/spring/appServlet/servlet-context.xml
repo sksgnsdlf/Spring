@@ -25,8 +25,4 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.springbook" />
-	
-	
-	
-	
 </beans:beans>

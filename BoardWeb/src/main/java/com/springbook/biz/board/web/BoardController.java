@@ -118,8 +118,12 @@ public class BoardController {
 			vo.setFilename(filename);
 			System.out.println("업로드 파일" + filename +" : " +filesize);
 		}
-		service.insertBoard(vo);
-		return "redirect:boardList";
+		service.insertBoard(vo); 
+		if(vo.getSeq() == -1) {  //프로시저를 통해 값을 넣는데 0이면 다시 입력창 페이지
+			return "boardInsert";
+		} else {
+		return "redirect:boardList"; //값이 들어갔으면(0이아닐때) 리스트 페이지로 이동
+		}
 	}
 	
 	/**

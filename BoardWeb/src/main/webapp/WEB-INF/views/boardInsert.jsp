@@ -4,6 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script>
+if("${boardVO.seq}"==-1){
+	alert('${boardVO.msg}');
+}
+</script>
+</head>
 <body>
 <h3>게시글등록</h3>
 <form action="boardInsert" method="post" enctype="multipart/form-data">
@@ -13,5 +19,6 @@
 	내용<textarea rows="3" cols="20" name="content"></textarea><br>
 	<button>등록</button>
 </form>
+
 </body>
 </html>

@@ -12,7 +12,15 @@
         <result property="regDate" column="REGDATE" />
         <result property="cnt" column="CNT" />
     </resultMap>
-
+	
+	<insert id="insertBoardProcedure" statementType="CALLABLE" 
+	parameterType="board">
+		{ call BOARD_INS_PROC(#{title},
+							 #{writer}, 
+							 #{content}, 
+							 #{seq, mode=OUT, jdbcType=NUMERIC, javaType=java.lang.Integer},
+							 #{msg, mode=OUT, jdbcType=VARCHAR, javaType=string})}
+	</insert>	
     <insert id="insertBoard" parameterType="board">
         INSERT INTO BOARD(SEQ 
         				  , TITLE 

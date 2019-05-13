@@ -15,8 +15,8 @@ public class BoardDAOMybatis {
 	SqlSessionTemplate mybatis;
 	
 	public void insertBoard(BoardVO vo) {
-		System.out.println("mybatis insert 실행");
-		mybatis.insert("BoardDAO.insertBoard",vo);
+		System.out.println("mybatis insert procedure 실행");
+		mybatis.insert("BoardDAO.insertBoardProcedure",vo);
 	}
 	
 	public void updateBoard(BoardVO vo) {

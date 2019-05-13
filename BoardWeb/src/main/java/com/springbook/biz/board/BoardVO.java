@@ -12,6 +12,7 @@ public class BoardVO {
 	private String content;
 	private Date regDate;
 	private int cnt;
+	private String msg;
 	private String searchCondition;
 	private String searchKeyword;
 	private String[] seqs;
@@ -19,6 +20,12 @@ public class BoardVO {
 	private int first;
 	private int last;
 	
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 	public int getFirst() {
 		return first;
 	}
