@@ -95,6 +95,7 @@
     	ORDER BY SEQ
     	) b ) a where rn between #{first} and #{last}
     </select>
+    
 	<!-- Paging count수 -->
     <select id="getBoardCount" resultType="int">
         SELECT COUNT(*) FROM BOARD

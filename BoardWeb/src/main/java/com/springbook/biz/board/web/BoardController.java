@@ -77,8 +77,9 @@ public class BoardController {
 	//목록조회
 	@RequestMapping("/boardList")
 	public String boardList(Model model, Paging paging, 
-							@RequestParam(required=false, defaultValue="TITLE", value="searchCondition") String cond, 
-							@RequestParam(required=false) String searchKeyword) { // @RequestParam의 required default값은 true 즉, 반드시 값이 있어야 함(파라미터 값이 null일때 실행 불가능)
+		@RequestParam(required=false, defaultValue="TITLE", value="searchCondition") String cond, 
+		@RequestParam(required=false) String searchKeyword) { 
+		// @RequestParam의 required default값은 true 즉, 반드시 값이 있어야 함(파라미터 값이 null일때 실행 불가능)
 		BoardVO vo = new BoardVO();
 		vo.setSearchCondition(cond);
 		vo.setSearchKeyword(searchKeyword);

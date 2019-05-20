@@ -29,7 +29,7 @@
 </c:if>
 검색조건: ${boardVO}
 <form name="searchFrm">
-    <input type="hidden" name="page">
+    <input type="hidden" name="page" value="1">
 	<select name="searchCondition">
 		<option value="">선택
 		<c:forEach items="${condMap}" var="option">
